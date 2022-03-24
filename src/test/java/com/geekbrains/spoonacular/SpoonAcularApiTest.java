@@ -2,7 +2,6 @@ package com.geekbrains.spoonacular;
 
 import com.geekbrains.BaseTest;
 import io.restassured.RestAssured;
-import io.restassured.specification.ResponseSpecification;
 import net.javacrumbs.jsonunit.JsonAssert;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeAll;
@@ -11,7 +10,8 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 
 import static net.javacrumbs.jsonunit.core.Option.IGNORING_ARRAY_ORDER;
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.lessThan;
 
 public class SpoonAcularApiTest extends BaseTest {
 
