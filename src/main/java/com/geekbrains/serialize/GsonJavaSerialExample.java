@@ -1,6 +1,5 @@
 package com.geekbrains.serialize;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.geekbrains.spoonacular.model.RecipesSearchResponseItem;
 import com.google.gson.Gson;
 
