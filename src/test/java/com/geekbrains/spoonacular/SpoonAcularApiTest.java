@@ -1,28 +1,26 @@
 package com.geekbrains.spoonacular;
 
 import com.geekbrains.BaseTest;
+import com.geekbrains.clients.SpoonAcularClient;
 import com.geekbrains.spoonacular.model.RecipesSearchResponse;
 import com.geekbrains.spoonacular.model.RecipesSearchResponseItem;
+import com.geekbrains.spoonacular.model.SearchGroceryProductRequest;
+import com.geekbrains.spoonacular.model.SearchGroceryProductResponse;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
-import io.restassured.specification.RequestSpecification;
 import net.javacrumbs.jsonunit.JsonAssert;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Locale;
 
 import static net.javacrumbs.jsonunit.core.Option.IGNORING_ARRAY_ORDER;
-import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.lessThan;
 
 public class SpoonAcularApiTest extends BaseTest {
@@ -30,9 +28,10 @@ public class SpoonAcularApiTest extends BaseTest {
     private static final String API_KEY = "77f47619dd984e85b6d018d0189ef9fc";
     private static final String BASE_URL = "https://api.spoonacular.com";
 
+    private static SpoonAcularClient client;
+
 
     // specification made by Builders (request/response) through the base URL //
-
     @BeforeAll
     static void beforeAll() {
         RestAssured.baseURI = BASE_URL;
@@ -45,6 +44,8 @@ public class SpoonAcularApiTest extends BaseTest {
                 .expectStatusCode(200)
                 .expectResponseTime(lessThan(3000L))
                 .build();
+
+        client = new SpoonAcularClient();
     }
 
     @Test
@@ -96,7 +97,7 @@ public class SpoonAcularApiTest extends BaseTest {
 
         System.out.println(actually);
 
-        for (RecipesSearchResponseItem item : actually.getResults()){
+        for (RecipesSearchResponseItem item : actually.getResults()) {
             Assertions.assertNotNull(item.getId());
             Assertions.assertTrue(item.getTitle().toLowerCase(Locale.ROOT).contains("pasta"));
             Image image = ImageIO.read(new URL(item.getImage()));
@@ -119,6 +120,26 @@ public class SpoonAcularApiTest extends BaseTest {
                 actually,
                 JsonAssert.when(IGNORING_ARRAY_ORDER)
         );*/
+
+    }
+
+    @Test
+    void testProductSearchGrocery() throws IOException {
+        SearchGroceryProductResponse products = client.findAllProducts(SearchGroceryProductRequest.builder()
+                .query("pasta")
+                .minCalories(10L)
+                .maxCalories(1000L)
+                .number(3L)
+                .build()
+        );
+
+        String expected = getResourceAsString("products.json");
+
+        JsonAssert.assertJsonEquals(
+                expected,
+                products,
+                JsonAssert.when(IGNORING_ARRAY_ORDER)
+        );
 
     }
 
