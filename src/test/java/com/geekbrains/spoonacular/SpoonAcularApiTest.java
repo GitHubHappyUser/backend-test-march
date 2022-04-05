@@ -123,14 +123,16 @@ public class SpoonAcularApiTest extends BaseTest {
 
     }
 
+    // retrofit //
     @Test
     void testProductSearchGrocery() throws IOException {
-        SearchGroceryProductResponse products = client.findAllProducts(SearchGroceryProductRequest.builder()
-                .query("pasta")
-                .minCalories(10L)
-                .maxCalories(1000L)
-                .number(3L)
-                .build()
+        SearchGroceryProductResponse products = client.findAllProducts(
+                SearchGroceryProductRequest.builder()
+                        .query("pasta")
+                        .minCalories(10L)
+                        .maxCalories(1000L)
+                        .number(3L)
+                        .build()
         );
 
         String expected = getResourceAsString("products.json");

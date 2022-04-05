@@ -6,6 +6,7 @@ import com.geekbrains.spoonacular.model.AutoCompleteProductResponse;
 import com.geekbrains.spoonacular.model.SearchGroceryProductRequest;
 import com.geekbrains.spoonacular.model.SearchGroceryProductResponse;
 import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Call;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -23,11 +24,17 @@ public class SpoonAcularClient {
 
     public SpoonAcularClient() {
 
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+
+        // logging //
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BASIC);
+
         OkHttpClient client = new OkHttpClient.Builder()
                 .connectTimeout(1000, TimeUnit.MILLISECONDS)
                 .readTimeout(1000, TimeUnit.MILLISECONDS)
                 .writeTimeout(1000, TimeUnit.MILLISECONDS)
                 .callTimeout(Duration.ZERO)
+                .addInterceptor(loggingInterceptor)
                 .build();
 
 
