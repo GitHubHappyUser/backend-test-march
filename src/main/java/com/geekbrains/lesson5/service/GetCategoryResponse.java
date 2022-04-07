@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class GetCategoryResponse<Product> {
+public class GetCategoryResponse {
     @JsonProperty("id")
     private Integer id;
     @JsonProperty("title")
