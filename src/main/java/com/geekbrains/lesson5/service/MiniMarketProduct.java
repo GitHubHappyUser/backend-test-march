@@ -12,9 +12,13 @@ import lombok.ToString;
 @Data
 public class MiniMarketProduct {
 
-    private Long id;
+    @JsonProperty("id")
+    private Integer id;
+    @JsonProperty("title")
     private String title;
-    private String image;
-    private String imageType;
+    @JsonProperty("price")
+    private Integer price;
+    @JsonProperty("categoryTitle")
+    private String categoryTitle;
 
 }
