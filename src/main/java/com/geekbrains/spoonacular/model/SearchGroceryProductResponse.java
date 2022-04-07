@@ -10,20 +10,12 @@ import java.util.List;
 public class SearchGroceryProductResponse {
 
     private String type;
-
     private List<ProductView> products;
-
     private Long offset;
-
     private Long number;
-
     private Long totalProducts;
-
     private Long processingTimeMs;
-
     private Long expires;
-
     private Boolean isStale;
-
 
 }

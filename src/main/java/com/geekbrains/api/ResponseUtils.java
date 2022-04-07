@@ -1,6 +1,5 @@
 package com.geekbrains.api;
 
-import com.geekbrains.spoonacular.model.SearchGroceryProductResponse;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Response;
