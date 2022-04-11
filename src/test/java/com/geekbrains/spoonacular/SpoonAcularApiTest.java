@@ -2,6 +2,7 @@ package com.geekbrains.spoonacular;
 
 import com.geekbrains.BaseTest;
 import com.geekbrains.clients.SpoonAcularClient;
+import com.geekbrains.spoonacular.model.*;
 import com.geekbrains.spoonacular.model.RecipesSearchResponse;
 import com.geekbrains.spoonacular.model.RecipesSearchResponseItem;
 import com.geekbrains.spoonacular.model.SearchGroceryProductRequest;
@@ -9,6 +10,7 @@ import com.geekbrains.spoonacular.model.SearchGroceryProductResponse;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.builder.ResponseSpecBuilder;
+import io.restassured.common.mapper.TypeRef;
 import net.javacrumbs.jsonunit.JsonAssert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -18,6 +20,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.Locale;
 
 import static net.javacrumbs.jsonunit.core.Option.IGNORING_ARRAY_ORDER;
@@ -103,46 +106,65 @@ public class SpoonAcularApiTest extends BaseTest {
             Image image = ImageIO.read(new URL(item.getImage()));
             Assertions.assertNotNull(image);
 
-//            System.out.println(image);
-
-            /*JFrame frame = new JFrame();
-            frame.setIconImage(image);
-            frame.setSize(100,100);
-            frame.show();*/
         }
 
-      /*  String expected = getResourceAsString("expected.json");
 
+    }
 
-        // assertion transferring the Java format to assertion format //
+    @Test
+    void testReceiptAutoComplete() throws IOException {
+
+        List<AutoCompleteRecipeItem> actually = RestAssured.given()
+                .queryParam("query", "pizza")
+                .queryParam("number", 10)
+                .log()
+                .uri()
+                .expect()
+                .log()
+                .body()
+                .when()
+                .get("recipes/autocomplete")
+                .body()
+                .as(new TypeRef<>() {});
+
+        String expected = getResourceAsString("autocomplete/expected.json");
+
         JsonAssert.assertJsonEquals(
                 expected,
                 actually,
                 JsonAssert.when(IGNORING_ARRAY_ORDER)
-        );*/
-
+        );
     }
+
 
     // retrofit //
     @Test
     void testProductSearchGrocery() throws IOException {
-        SearchGroceryProductResponse products = client.findAllProducts(
-                SearchGroceryProductRequest.builder()
-                        .query("pasta")
-                        .minCalories(10L)
-                        .maxCalories(1000L)
-                        .number(3L)
-                        .build()
-        );
+        List<AutoCompleteRecipeItem> actually = RestAssured.given()
+                .queryParam("query", "pizza")
+                .queryParam("number", 10)
+                .log()
+                .uri()
+                .expect()
+                .log()
+                .body()
+                .when()
+                .get("recipes/autocomplete")
+                .body()
+                .as(new TypeRef<>() {});
 
         String expected = getResourceAsString("products.json");
 
         JsonAssert.assertJsonEquals(
                 expected,
-                products,
+                actually,
                 JsonAssert.when(IGNORING_ARRAY_ORDER)
         );
 
     }
+
+
+
+
 
 }
